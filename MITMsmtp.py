@@ -2,6 +2,7 @@ from SMTPServer import SMTPServer
 from SMTPServerSSL import SMTPServerSSL
 from SMTPHandler import SMTPHandler, messages
 import threading
+import argparse, sys
 
 class MITMsmtp:
     def __init__(self, server_address, port, ssl=False, certfile=None, keyfile=None):
@@ -37,3 +38,34 @@ class MITMsmtp:
 
     def getMessageHandler(self):
         return messages
+
+if __name__ == "__main__":
+    parser=argparse.ArgumentParser(description="MITMsmtp is an Evil SMTP Server for pentesting SMTP clients to catch login credentials and mails sent over plain or SSL encrypted connections.")
+    parser.add_argument('--server_address', default="0.0.0.0", help='IP Address to listen on (default: all)')
+    parser.add_argument('--port', default=8857, type=int, help='Port to listen on (default: 8857)')
+    parser.add_argument('--SSL', default=False, type=bool, help='Enables SSL Support (default: False)')
+    parser.add_argument('--certfile', default=None, help='Certfificate for SSL Mode')
+    parser.add_argument('--keyfile', default=None, help='Key for SSL Mode')
+    parser.add_argument('--log', default=None, help='Directory for mails and credentials')
+    args=parser.parse_args()
+
+    def login(message, username, password):
+        print("Got username/password:")
+        print("Username" + username)
+        print("Password" + password)
+
+    def message(message):
+        print("Message complete!")
+
+    SMTPServer = MITMsmtp(args.server_address, args.port, args.SSL, args.certfile, args.keyfile) #Create new SMTPServer
+
+    messageHandler = SMTPServer.getMessageHandler() #Get Message Handler
+    messageHandler.registerLoginCallback(login) #Register callback for login
+    messageHandler.registerMessageCallback(message) #Register callback for complete messages
+
+    SMTPServer.start() #Start SMTPServer
+    try:
+        input("Press enter to stop!\n")
+    except KeyboardInterrupt:
+        pass
+    SMTPServer.stop() #Stop SMTPServer
