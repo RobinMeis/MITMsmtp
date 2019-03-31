@@ -1,5 +1,5 @@
 # MITMsmtp
-MITMsmtp is an Evil SMTP Server for pentesting SMTP clients to catch login credentials and mails sent over plain or SSL/TLS encrypted connections. The idea is to catch sensitive emails sent by clients which are not correctly verifying the SMTP servers identity in SSL/TLS mode. MITMsmtp will catch username and password as well as the message itself. This way you might gain access to a companies mail server or catch information like password reset tokens or verification links sent by applications. Using those information you might gain more and more access to a system.
+MITMsmtp is an Evil SMTP Server for pentesting SMTP clients to catch login credentials and mails sent over plain or SSL/TLS encrypted connections. The idea is to catch sensitive emails sent by clients which are not correctly verifying the SMTP servers identity in SSL/TLS mode. MITMsmtp will catch username and password as well as the message itself. This way you might gain access to a companies mail server or catch information like password reset tokens or verification links sent by applications. Using those information you might gain more and more access to a system. MITMsmtp has been built to work together with MITM Attacks like ARP Spoofing to terminate encrypted connections.
 
 MITMsmtp offers a command line tool as well as an open Python3 API which can be used to build own tools for automated pentesting of applications.
 
@@ -85,6 +85,9 @@ Recipients: recipient-a@example.com
 ```
 
 If you want to get the full message, you have to enable logging.
+
+### Logging
+Running `MITMsmtp --log logdir` will enable logging. Please make sure that the directory exists. MITMsmtp will create n+1 files while n is the amount of received messages. Each mail will be written into a new file like it has been received. Additionally all received credentials are stored in credentials.log.
 
 To use mitm-smtp as a transparent SMTP Proxy, enable forwarding mode...
 ``sysctl -w net.ipv4.ip_forward=1``
