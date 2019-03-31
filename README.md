@@ -100,7 +100,7 @@ To use MITMsmtp with the example certificates run `MITMsmtp --certfile certs/MIT
 This section shows the usage of MITMsmtp if you are able to intercept the victims traffic.
 
 ### ARP Spoofing
-ARP Spoofing is one way to get between Victim and Router. In case you have the ability to modify your routers settings, you might skip this step. First off all you need the victims and the routers IP address. Make also sure that your client is connected to the same subnet.
+ARP Spoofing is one way to get between Victim and Router. In case you have the ability to modify your routers settings, you might skip this step. There are many other ways to perform MITM Attacks like DHCP Race-Conditions or DNS Spoofing. These instructions are just a basic idea how to use MITMsmtp. First of all you need the victims and the routers IP address. Make also sure that your client is connected to the same subnet.
 
 In this example the Routers IP will be *192.168.42.1* and the Victims IP will be *192.168.42.24*. Run the following commands as root.
 
