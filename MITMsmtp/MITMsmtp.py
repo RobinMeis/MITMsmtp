@@ -32,6 +32,7 @@ class MITMsmtp:
             self.SMTPServer.shutdown()
             self.thread.join()
             self.thread = None
+            self.SMTPServer.server_close()
         else:
             raise ValueError("MITMsmtp is currently not running")
 
