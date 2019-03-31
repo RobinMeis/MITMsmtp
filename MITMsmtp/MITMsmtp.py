@@ -1,6 +1,6 @@
-from SMTPServer import SMTPServer
-from SMTPServerSSL import SMTPServerSSL
-from SMTPHandler import SMTPHandler, messages
+from .SMTPServer import SMTPServer
+from .SMTPServerSSL import SMTPServerSSL
+from .SMTPHandler import SMTPHandler, messages
 import threading
 import argparse, sys
 from datetime import datetime

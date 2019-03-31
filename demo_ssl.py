@@ -1,4 +1,4 @@
-from MITMsmtp import MITMsmtp
+from MITMsmtp.MITMsmtp import MITMsmtp
 
 #Callback to be fired as soon as we receive login credentials
 def login(message, username, password):

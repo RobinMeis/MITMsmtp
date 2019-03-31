@@ -1,5 +1,5 @@
 from socketserver import StreamRequestHandler
-from MessageHandler import MessageHandler
+from .MessageHandler import MessageHandler
 import re
 import base64
 

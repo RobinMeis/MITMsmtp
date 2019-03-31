@@ -4,7 +4,7 @@ with open("README.md", "r") as fh:
     long_description = fh.read()
 
 setuptools.setup(
-    name="mitmsmtp",
+    name="MITMsmtp",
     version="0.0.1",
     author="Robin Meis",
     author_email="blog@smartnoob.de",
