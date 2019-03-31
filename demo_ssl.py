@@ -10,7 +10,7 @@ def login(message, username, password):
 def message(message):
     print("Message complete!")
 
-SMTPServer = MITMsmtp("10.2.10.126", 8888, True, "certs/MITMsmtp.crt", "certs/MITMsmtp.key") #Create new SMTPServer
+SMTPServer = MITMsmtp("0.0.0.0", 8888, True, "certs/MITMsmtp.crt", "certs/MITMsmtp.key") #Create new SMTPServer
 messageHandler = SMTPServer.getMessageHandler() #Get Message Handler
 messageHandler.registerLoginCallback(login) #Register callback for login
 messageHandler.registerMessageCallback(message) #Register callback for complete messages
