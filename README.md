@@ -113,6 +113,7 @@ To make sure that out victim doesn't find a way around us, block ICMP redirects:
 `sysctl -w net.ipv4.conf.all.send_redirects=0`
 
 Next we create a port forwarding rule from SMTP default port 587 to MITMsmtp. Please make sure that your victim uses port 587 and adjust if needed.
+
 `iptables -t nat -A PREROUTING -p tcp --destination-port 587 -j REDIRECT --to-port 8587`
 
 To start ARP Spoofing you will need ettercap. Run the following command and replace the IP addresses according to your setup:
