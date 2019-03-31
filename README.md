@@ -35,12 +35,36 @@ Change into MITMsmtp directory and start the installation:
 That's it!
 
 ### Updating
-
 `git pull`
 
 `sudo python3 setup.py install`
 
 ## Usage
+*This section describes the command line usage. For the API reference, please refere to API section.*
+
+Running `MITMsmtp --help` will give you an overview about the available command line switches:
+```
+usage: MITMsmtp [-h] [--server_address SERVER_ADDRESS] [--port PORT]
+                [--SSL SSL] [--certfile CERTFILE] [--keyfile KEYFILE]
+                [--log LOG]
+
+MITMsmtp is an Evil SMTP Server for pentesting SMTP clients to catch login
+credentials and mails sent over plain or SSL encrypted connections.
+
+optional arguments:
+  -h, --help            show this help message and exit
+  --server_address SERVER_ADDRESS
+                        IP Address to listen on (default: all)
+  --port PORT           Port to listen on (default: 8587)
+  --SSL SSL             Enables SSL Support (default: False)
+  --certfile CERTFILE   Certfificate for SSL Mode
+  --keyfile KEYFILE     Key for SSL Mode
+  --log LOG             Directory for mails and credentials
+```
+
+When running `MITMsmtp` without any parameters it will start an unencrypted SMTP server on port 8587 on all interfaces.
+
+
 To use mitm-smtp as a transparent SMTP Proxy, enable forwarding mode...
 ``sysctl -w net.ipv4.ip_forward=1``
 ...block ICMP redirects...
@@ -49,5 +73,6 @@ To use mitm-smtp as a transparent SMTP Proxy, enable forwarding mode...
 ``iptables -t nat -A PREROUTING -p tcp --destination-port 587 -j REDIRECT --to-port 8888``
 
 ## Reference
-https://tools.ietf.org/html/rfc5321
-http://www.samlogic.net/articles/smtp-commands-reference-auth.htm
+[1] https://tools.ietf.org/html/rfc5321
+
+[2] http://www.samlogic.net/articles/smtp-commands-reference-auth.htm
