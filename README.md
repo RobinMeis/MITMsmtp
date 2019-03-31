@@ -62,8 +62,29 @@ optional arguments:
   --log LOG             Directory for mails and credentials
 ```
 
-When running `MITMsmtp` without any parameters it will start an unencrypted SMTP server on port 8587 on all interfaces.
+When running `MITMsmtp` without any parameters it will start an unencrypted SMTP server on port 8587 on all interfaces. Pointing Thunderbird or any other SMTP client will give you the ability to test MITMsmtp.
 
+As soon as a client has logged in, you will get the following information:
+
+```
+=== Login ===
+Username: user@example.com
+Password: SuperSecureAndUncrackablePassword
+```
+
+After the client has transmitted it's message, you will get basic information about the message:
+
+```
+=== Complete Message ===
+Username  : user@example.com
+Password  : SuperSecureAndUncrackablePassword
+Client    : [192.168.178.42]
+Sender    : user@example.com
+Recipients: recipient-a@example.com
+            recipient-b@example.com
+```
+
+If you want to get the full message, you have to enable logging.
 
 To use mitm-smtp as a transparent SMTP Proxy, enable forwarding mode...
 ``sysctl -w net.ipv4.ip_forward=1``
