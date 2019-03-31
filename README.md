@@ -1,5 +1,44 @@
-# mitm-smtp
-A proxy for SMTP to catch both, encrypted and unencrypted mails sent using SMTP.
+# MITMsmtp
+MITMsmtp is an Evil SMTP Server for pentesting SMTP clients to catch login credentials and mails sent over plain or SSL/TLS encrypted connections. The idea is to catch sensitive emails sent by clients which are not correctly verifying the SMTP servers identity in SSL/TLS mode. MITMsmtp will catch username and password as well as the message itself. This way you might gain access to a companies mail server or catch information like password reset tokens or verification links sent by applications. Using those information you might gain more and more access to a system.
+
+MITMsmtp offers a command line tool as well as an open Python3 API which can be used to build own tools for automated pentesting of applications.
+
+## Compatibility
+MITMsmtp has been tested against the SMTP client of Thunderbird 60.5.3 and some other SMTP clients.
+
+### Connection Security
+MITMsmtp supports the following connection security modes:
+* Plaintext
+* SSL/TLS
+* STARTTLS (under development, not yet working)
+
+### Login Methods
+MITMsmtp supports the following login methods:
+* PLAIN
+* LOGIN (under development, not yet working)
+
+Other methods are not supported as we want to extract the cleartext password. As this might be a problem for restrictive clients, it is planned to add support for MD5 later. However NTLM or Kerberos can't be supported as these methods require the server to know the cleartext password.
+
+## Setup
+MITMsmtp requires Python3 and setuptools. You might want to install git as well. Use the following command on Debian:
+
+`apt install python3 python3-setuptools git`
+
+Now just clone the MITMsmtp repository:
+
+`git clone https://github.com/RobinMeis/MITMsmtp.git`
+
+Change into MITMsmtp directory and start the installation:
+
+`sudo python3 setup.py install`
+
+That's it!
+
+### Updating
+
+`git pull`
+
+`sudo python3 setup.py install`
 
 ## Usage
 To use mitm-smtp as a transparent SMTP Proxy, enable forwarding mode...
@@ -11,5 +50,4 @@ To use mitm-smtp as a transparent SMTP Proxy, enable forwarding mode...
 
 ## Reference
 https://tools.ietf.org/html/rfc5321
-
-manage/account/verify?email&#61;blog%40smartnoob.de&amp;t&#61;ZjErNvfUarveUSgJ
+http://www.samlogic.net/articles/smtp-commands-reference-auth.htm
