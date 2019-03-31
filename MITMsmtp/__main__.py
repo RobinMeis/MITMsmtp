@@ -1,6 +1,7 @@
 from MITMsmtp import MITMsmtp
 import argparse, sys
 from datetime import datetime
+import time
 
 class MailLog:
     def __init__(self, directory=None):
@@ -50,8 +51,9 @@ def main(args=None):
     messageHandler.registerMessageCallback(log.messageCallback) #Register callback for complete messages
 
     server.start() #Start SMTPServer
+    print("Waiting for messages\n")
     try:
-        input("Waiting for messages...\n")
+        while (True): time.sleep(5)
     except KeyboardInterrupt:
         pass
     server.stop() #Stop SMTPServer
