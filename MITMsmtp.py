@@ -1,6 +1,6 @@
 from SMTPServer import SMTPServer
 from SMTPServerSSL import SMTPServerSSL
-from SMTPHandler import SMTPHandler
+from SMTPHandler import SMTPHandler, messages
 import threading
 
 class MITMsmtp:
@@ -34,3 +34,6 @@ class MITMsmtp:
             self.thread = None
         else:
             raise ValueError("MITMsmtp is currently not running")
+
+    def getMessageHandler(self):
+        return messages

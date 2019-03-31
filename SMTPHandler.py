@@ -1,15 +1,14 @@
 from socketserver import StreamRequestHandler
+from MessageHandler import MessageHandler
 import re
 import base64
 
+global messages
+messages = MessageHandler()
+
 class SMTPHandler(StreamRequestHandler):
     def init(self):
-        self.client_name = None
-        self.username = None
-        self.password = None
-        self.sender = None
-        self.recipients = []
-        self.message = None
+        self.message = messages.addMessage()
 
     def handle(self):
         self.init()
@@ -26,13 +25,12 @@ class SMTPHandler(StreamRequestHandler):
             self.sendIntermediate()
             self.readMSG()
             self.sendOK()
-
         except Exception as e:
             print(e)
             print("Closed connection!")
             self.connection.close()
         finally:
-            # Clean up the connection
+            self.message.setComplete()
             self.connection.close()
 
     def sendGreeting(self):
@@ -43,10 +41,10 @@ class SMTPHandler(StreamRequestHandler):
         match = re.match("EHLO (.*)", line)
         if (match == None):
             raise ValueError("Invalid EHLO sent by client")
-        self.client_name = match.group(1)
+        self.message.setClientName(match.group(1))
 
     def sendHELLO(self):
-        self.connection.sendall(b'250-smtp.server.com Hello ' + self.client_name.encode("ASCII") + b'\r\n')
+        self.connection.sendall(b'250-smtp.server.com Hello ' + self.message.client_name.encode("ASCII") + b'\r\n')
         self.connection.sendall(b'250-SIZE 1000000\r\n')
 
     def sendAuthTypes(self):
@@ -63,11 +61,9 @@ class SMTPHandler(StreamRequestHandler):
         if (len(auth) < 2):
             raise ValueError("Username/Password not found")
 
-        self.username = auth[-2]
-        self.password = auth[-1]
-
-        print("Username: " + self.username)
-        print("Password: " + self.password)
+        username = auth[-2]
+        password = auth[-1]
+        self.message.setLogin(username, password)
 
     def acceptAuth(self):
         self.connection.sendall(b'235 2.7.0 Authentication successful\r\n')
@@ -78,7 +74,7 @@ class SMTPHandler(StreamRequestHandler):
         if (match == None):
             raise ValueError("Could not read sender")
 
-        self.sender = match.group(1)
+        self.message.setSender(match.group(1))
 
     def sendOK(self):
         self.connection.sendall(b'250 OK\r\n')
@@ -98,10 +94,10 @@ class SMTPHandler(StreamRequestHandler):
         self.connection.sendall(b'354 Intermediate\r\n')
 
     def readMSG(self):
-        self.message = ""
+        message = ""
         while True:
             line = self.rfile.readline().strip().decode("ASCII")
             if (line == '.'):
-                print(self.message)
+                self.message.setMessage(message)
                 return
-            self.message += line + "\r\n"
+            message += line + "\r\n"
