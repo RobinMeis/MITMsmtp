@@ -10,8 +10,9 @@ class MailLog:
         print("=== Login ===")
         print("Username: " + username)
         print("Password: " + password + "\n")
-        with open(self.directory + "/credentials.log", "a+") as log:
-            log.write("[%s] %s:%s (%s)\n" % (datetime.now().strftime("%d.%m.%Y %H:%M:%S"), username, password, message.client_name))
+        if (self.directory != None):
+            with open(self.directory + "/credentials.log", "a+") as log:
+                log.write("[%s] %s:%s (%s)\n" % (datetime.now().strftime("%d.%m.%Y %H:%M:%S"), username, password, message.client_name))
 
     def messageCallback(self, message):
         output = """=== Complete Message ===\nUsername  : %s\nPassword  : %s\nClient    : %s\nSender    : %s\n""" % (message.username, message.password, message.client_name, message.sender)
@@ -25,9 +26,10 @@ class MailLog:
             recipient_count+=1
 
         print(output)
-        with open("%s/%s.log" % (self.directory, datetime.now().strftime("%d-%m-%Y_%H:%M:%S")), "w+") as log:
-            log.write(output + "\n\n")
-            log.write(message.message)
+        if (self.directory != None):
+            with open("%s/%s.log" % (self.directory, datetime.now().strftime("%d-%m-%Y_%H:%M:%S")), "w+") as log:
+                log.write(output + "\n\n")
+                log.write(message.message)
 
 def main(args=None):
     parser=argparse.ArgumentParser(description="MITMsmtp is an Evil SMTP Server for pentesting SMTP clients to catch login credentials and mails sent over plain or SSL encrypted connections.")
