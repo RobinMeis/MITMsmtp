@@ -88,6 +88,7 @@ class SMTPHandler(StreamRequestHandler):
             match = re.match("RCPT TO:\<([a-zA-z0-9]*@[a-zA-z0-9\.]*)\>", line)
             if (match == None):
                 raise ValueError("Could not read recipients")
+            self.message.addRecipient(match.group(1))
             self.sendOK()
 
     def sendIntermediate(self):
