@@ -124,6 +124,9 @@ Finally you can fire up MITMsmtp:
 
 `MITMsmtp --log log/`
 
+#### Limitations
+As we perform a port forward, MITMsmtp can't determine the original packet destination. This means that MITMsmtp can't log the real SMTP server name or IP. If you need these information, just run wireshark while catching mails using MITMsmtp and filter for `tcp.port==587` or `dns`. This way you will be able to get the domain name as well as the original IP.
+
 ## Reference
 [1] https://tools.ietf.org/html/rfc5321
 
