@@ -29,7 +29,7 @@ class SMTPHandler(StreamRequestHandler):
             print(e)
             print("Closed connection!")
             self.connection.close()
-        finally:
+        else:
             self.message.setComplete()
             self.connection.close()
 
