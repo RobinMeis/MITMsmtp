@@ -16,5 +16,8 @@ messageHandler.registerLoginCallback(login) #Register callback for login
 messageHandler.registerMessageCallback(message) #Register callback for complete messages
 
 SMTPServer.start() #Start SMTPServer
-input("Press enter to stop!\n")
+try:
+    input("Press enter to stop!\n")
+except KeyboardInterrupt:
+    pass
 SMTPServer.stop() #Stop SMTPServer
