@@ -87,7 +87,14 @@ Recipients: recipient-a@example.com
 If you want to get the full message, you have to enable logging.
 
 ### Logging
-Running `MITMsmtp --log logdir` will enable logging. Please make sure that the directory exists. MITMsmtp will create n+1 files while n is the amount of received messages. Each mail will be written into a new file like it has been received. Additionally all received credentials are stored in credentials.log.
+Running `MITMsmtp --log logdir` will enable logging. Please make sure that the directory exists. MITMsmtp will create n+1 files while n is the amount of received messages. Each mail will be written into a new file like it has been received. Additionally all received credentials are stored in `credentials.log`.
+
+### Encryption
+Some clients fallback to unencrypted mode if you don't offer SSL/TLS. Always make sure to test this! For clients which don't fallback, you may want to test the encrypted mode. Please keep in mind, that a correctly configured client won't be vulnerable to this attack. You will be unable to fake a trusted certificate for a validated common name and thus the client will stop connection before sending credentials. However some clients don't implement proper certificate validation. This is where this attack starts.
+
+To run MITMsmtp in encrypted mode you need a certificate and the according key. You can use the example in certs/. For some clients you might need to generate own certificates to bypass certain validation steps.
+
+To use MITMsmtp with the example certificates run `MITMsmtp --certfile certs/MITMsmtp.crt --keyfile certs/MITMsmtp.key`.
 
 To use mitm-smtp as a transparent SMTP Proxy, enable forwarding mode...
 ``sysctl -w net.ipv4.ip_forward=1``
