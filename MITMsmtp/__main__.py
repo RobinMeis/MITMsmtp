@@ -45,14 +45,18 @@ def main(args=None):
     parser.add_argument('--certfile', default=None, help='Certfificate for SSL Mode')
     parser.add_argument('--keyfile', default=None, help='Key for SSL Mode')
     parser.add_argument('--log', default=None, help='Directory for mails and credentials')
+    parser.add_argument('--disable-auth-plain', action='store_true', help='Disables authentication using method PLAIN (default: False)')
+    parser.add_argument('--disable-auth-login', action='store_true', help='Disables authentication using method LOGIN (default: False)')
+
     args=parser.parse_args()
     args.SSL = args.SSL.lower() == "true" #Convert string to boolean
-
     log = MailLog(args.log)
 
     auth = authHandler() #Initialize supported authMethods
-    auth.addAuthMethod(authPlain)
-    auth.addAuthMethod(authLogin)
+    if (not args.disable_auth_plain):
+        auth.addAuthMethod(authPlain)
+    if (not args.disable_auth_login):
+        auth.addAuthMethod(authLogin)
 
     server = MITMsmtp.MITMsmtp(args.server_address, args.port, auth, args.SSL, args.certfile, args.keyfile) #Create new SMTPServer
 
