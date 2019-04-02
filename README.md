@@ -15,9 +15,10 @@ MITMsmtp supports the following connection security modes:
 ### Login Methods
 MITMsmtp supports the following login methods:
 * PLAIN
-* LOGIN (under development, not yet working)
+* LOGIN
+* CRAM-MD5 (under development, not yet working)
 
-Other methods are not supported as we want to extract the cleartext password. As this might be a problem for restrictive clients, it is planned to add support for MD5 later. However NTLM or Kerberos can't be supported as these methods require the server to know the cleartext password.
+Challenge-Response bases authentication methods like NTLM or Kerberos can't be supported as these methods require the server to know the cleartext password.
 
 ## Setup
 MITMsmtp requires Python3 and setuptools. You might want to install git as well. Use the following command on Debian:

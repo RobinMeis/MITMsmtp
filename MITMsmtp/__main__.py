@@ -52,7 +52,7 @@ def main(args=None):
 
     auth = authHandler() #Initialize supported authMethods
     auth.addAuthMethod(authPlain)
-    #auth.addAuthMethod(authLogin)
+    auth.addAuthMethod(authLogin)
 
     server = MITMsmtp.MITMsmtp(args.server_address, args.port, auth, args.SSL, args.certfile, args.keyfile) #Create new SMTPServer
 
