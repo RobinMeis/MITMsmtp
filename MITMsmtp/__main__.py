@@ -41,7 +41,7 @@ def main(args=None):
     parser=argparse.ArgumentParser(description="MITMsmtp is an Evil SMTP Server for pentesting SMTP clients to catch login credentials and mails sent over plain or SSL encrypted connections.")
     parser.add_argument('--server_address', default="0.0.0.0", help='IP Address to listen on (default: all)')
     parser.add_argument('--port', default=8587, type=int, help='Port to listen on (default: 8587)')
-    parser.add_argument('--SSL', default="False", help='Enables SSL Support (default: False)')
+    parser.add_argument('--SSL', action='store_true', help='Enables SSL Support (default: False)')
     parser.add_argument('--certfile', default=None, help='Certfificate for SSL Mode')
     parser.add_argument('--keyfile', default=None, help='Key for SSL Mode')
     parser.add_argument('--log', default=None, help='Directory for mails and credentials')
@@ -49,7 +49,6 @@ def main(args=None):
     parser.add_argument('--disable-auth-login', action='store_true', help='Disables authentication using method LOGIN (default: False)')
 
     args=parser.parse_args()
-    args.SSL = args.SSL.lower() == "true" #Convert string to boolean
     log = MailLog(args.log)
 
     auth = authHandler() #Initialize supported authMethods
