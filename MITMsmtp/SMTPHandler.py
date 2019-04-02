@@ -1,7 +1,6 @@
 from socketserver import StreamRequestHandler
 from .MessageHandler import MessageHandler
 import re
-import base64
 
 global messages
 messages = MessageHandler()
@@ -9,6 +8,7 @@ messages = MessageHandler()
 class SMTPHandler(StreamRequestHandler):
     def init(self):
         self.message = messages.addMessage()
+        self.auth = None
 
     def handle(self):
         self.init()
@@ -18,7 +18,6 @@ class SMTPHandler(StreamRequestHandler):
             self.sendHELLO()
             self.sendAuthTypes()
             self.readAuth()
-            self.acceptAuth()
             self.readSender()
             self.sendOK()
             self.readRecipients()
@@ -48,25 +47,18 @@ class SMTPHandler(StreamRequestHandler):
         self.connection.sendall(b'250-SIZE 1000000\r\n')
 
     def sendAuthTypes(self):
-        self.connection.sendall(b'250 AUTH PLAIN\r\n')
+        self.connection.sendall(b'250 AUTH ' + self.server.authHandler.toString().encode("ASCII") + b'\r\n')
 
     def readAuth(self):
         line = self.rfile.readline().strip().decode("ASCII")
-        match = re.match("AUTH PLAIN ([A-Za-z0-9]*=*)$", line)
-        if (match == None):
+        authMethod = self.server.authHandler.matchMethod(line)
+        if (authMethod == None):
             raise ValueError("Unsupported Authentication Type requested by client")
 
-        auth = base64.b64decode(match.group(1)).decode("ASCII").split('\x00')
-
-        if (len(auth) < 2):
-            raise ValueError("Username/Password not found")
-
-        username = auth[-2]
-        password = auth[-1]
+        self.auth = authMethod(self, line)
+        username = self.auth.getUsername()
+        password = self.auth.getPassword()
         self.message.setLogin(username, password)
-
-    def acceptAuth(self):
-        self.connection.sendall(b'235 2.7.0 Authentication successful\r\n')
 
     def readSender(self):
         line = self.rfile.readline().strip().decode("ASCII")

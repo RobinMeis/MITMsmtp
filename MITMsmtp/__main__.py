@@ -1,4 +1,9 @@
 from MITMsmtp import MITMsmtp
+
+from MITMsmtp.auth.authHandler import authHandler #Authentication methods
+from MITMsmtp.auth.authLogin import authLogin
+from MITMsmtp.auth.authPlain import authPlain
+
 import argparse, sys
 from datetime import datetime
 import time
@@ -44,7 +49,12 @@ def main(args=None):
     args.SSL = args.SSL.lower() == "true" #Convert string to boolean
 
     log = MailLog(args.log)
-    server = MITMsmtp.MITMsmtp(args.server_address, args.port, args.SSL, args.certfile, args.keyfile) #Create new SMTPServer
+
+    auth = authHandler() #Initialize supported authMethods
+    auth.addAuthMethod(authPlain)
+    #auth.addAuthMethod(authLogin)
+
+    server = MITMsmtp.MITMsmtp(args.server_address, args.port, auth, args.SSL, args.certfile, args.keyfile) #Create new SMTPServer
 
     messageHandler = server.getMessageHandler() #Get Message Handler
     messageHandler.registerLoginCallback(log.loginCallback) #Register callback for login
