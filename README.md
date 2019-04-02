@@ -44,9 +44,9 @@ That's it!
 
 Running `MITMsmtp --help` will give you an overview about the available command line switches:
 ```
-usage: MITMsmtp [-h] [--server_address SERVER_ADDRESS] [--port PORT]
-                [--SSL SSL] [--certfile CERTFILE] [--keyfile KEYFILE]
-                [--log LOG]
+usage: MITMsmtp [-h] [--server_address SERVER_ADDRESS] [--port PORT] [--SSL]
+                [--certfile CERTFILE] [--keyfile KEYFILE] [--log LOG]
+                [--disable-auth-plain] [--disable-auth-login]
 
 MITMsmtp is an Evil SMTP Server for pentesting SMTP clients to catch login
 credentials and mails sent over plain or SSL encrypted connections.
@@ -56,10 +56,14 @@ optional arguments:
   --server_address SERVER_ADDRESS
                         IP Address to listen on (default: all)
   --port PORT           Port to listen on (default: 8587)
-  --SSL SSL             Enables SSL Support (default: False)
+  --SSL                 Enables SSL Support (default: False)
   --certfile CERTFILE   Certfificate for SSL Mode
   --keyfile KEYFILE     Key for SSL Mode
   --log LOG             Directory for mails and credentials
+  --disable-auth-plain  Disables authentication using method PLAIN (default:
+                        False)
+  --disable-auth-login  Disables authentication using method LOGIN (default:
+                        False)
 ```
 
 When running `MITMsmtp` without any parameters it will start an unencrypted SMTP server on port 8587 on all interfaces. Pointing Thunderbird or any other SMTP client will give you the ability to test MITMsmtp. Please keep in mind that the default port MITMsmtp differs from the SMTP default port.
