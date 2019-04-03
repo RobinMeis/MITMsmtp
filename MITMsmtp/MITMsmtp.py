@@ -3,11 +3,12 @@ from .SMTPHandler import SMTPHandler, messages
 import threading
 
 class MITMsmtp:
-    def __init__(self, server_address, port, authHandler, ssl=False, certfile=None, keyfile=None):
+    def __init__(self, server_address, port, authHandler, STARTTLS=False, SSL=False, certfile=None, keyfile=None):
         self.server_address = server_address
         self.port = port
         self.authHandler = authHandler
-        self.ssl = ssl
+        self.STARTTLS = SSL
+        self.SSL = SSL
         self.certfile = certfile
         self.keyfile = keyfile
         self.SMTPServer = None
@@ -15,10 +16,10 @@ class MITMsmtp:
 
     def start(self):
         if (self.thread == None):
-            if (self.ssl):
+            if (self.SSL):
                 if (self.certfile == None or self.keyfile == None):
                     raise ValueError("Please specify a Certfile and a Keyfile when using SSL")
-            self.SMTPServer = SMTPServer((self.server_address, self.port), SMTPHandler, self.certfile, self.keyfile, self.ssl)
+            self.SMTPServer = SMTPServer((self.server_address, self.port), SMTPHandler, self.certfile, self.keyfile, self.STARTTLS, self.SSL)
 
             self.SMTPServer.authHandler = self.authHandler
             self.thread = threading.Thread(target=self.SMTPServer.serve_forever)

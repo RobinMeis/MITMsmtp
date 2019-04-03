@@ -9,8 +9,8 @@ MITMsmtp has been tested against the SMTP client of Thunderbird 60.5.3 and some 
 ### Connection Security
 MITMsmtp supports the following connection security modes:
 * Plaintext
+* STARTTLS
 * SSL/TLS
-* STARTTLS (under development, not yet working)
 
 ### Login Methods
 MITMsmtp supports the following login methods:
@@ -44,9 +44,9 @@ That's it!
 
 Running `MITMsmtp --help` will give you an overview about the available command line switches:
 ```
-usage: MITMsmtp [-h] [--server_address SERVER_ADDRESS] [--port PORT] [--SSL]
-                [--certfile CERTFILE] [--keyfile KEYFILE] [--log LOG]
-                [--disable-auth-plain] [--disable-auth-login]
+usage: MITMsmtp [-h] [--server_address SERVER_ADDRESS] [--port PORT]
+                [--STARTTLS] [--SSL] [--certfile CERTFILE] [--keyfile KEYFILE]
+                [--log LOG] [--disable-auth-plain] [--disable-auth-login]
 
 MITMsmtp is an Evil SMTP Server for pentesting SMTP clients to catch login
 credentials and mails sent over plain or SSL encrypted connections.
@@ -56,6 +56,7 @@ optional arguments:
   --server_address SERVER_ADDRESS
                         IP Address to listen on (default: all)
   --port PORT           Port to listen on (default: 8587)
+  --STARTTLS            Enables and requires STARTTLS Support (default: False)
   --SSL                 Enables SSL Support (default: False)
   --certfile CERTFILE   Certfificate for SSL Mode
   --keyfile KEYFILE     Key for SSL Mode
@@ -135,3 +136,5 @@ As we perform a port forward, MITMsmtp can't determine the original packet desti
 [1] https://tools.ietf.org/html/rfc5321
 
 [2] http://www.samlogic.net/articles/smtp-commands-reference-auth.htm
+
+[3] https://tools.ietf.org/html/rfc3207

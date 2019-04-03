@@ -41,6 +41,7 @@ def main(args=None):
     parser=argparse.ArgumentParser(description="MITMsmtp is an Evil SMTP Server for pentesting SMTP clients to catch login credentials and mails sent over plain or SSL encrypted connections.")
     parser.add_argument('--server_address', default="0.0.0.0", help='IP Address to listen on (default: all)')
     parser.add_argument('--port', default=8587, type=int, help='Port to listen on (default: 8587)')
+    parser.add_argument('--STARTTLS', action='store_true', help='Enables and requires STARTTLS Support (default: False)')
     parser.add_argument('--SSL', action='store_true', help='Enables SSL Support (default: False)')
     parser.add_argument('--certfile', default=None, help='Certfificate for SSL Mode')
     parser.add_argument('--keyfile', default=None, help='Key for SSL Mode')
@@ -57,7 +58,7 @@ def main(args=None):
     if (not args.disable_auth_login):
         auth.addAuthMethod(authLogin)
 
-    server = MITMsmtp.MITMsmtp(args.server_address, args.port, auth, args.SSL, args.certfile, args.keyfile) #Create new SMTPServer
+    server = MITMsmtp.MITMsmtp(args.server_address, args.port, auth, args.STARTTLS, args.SSL, args.certfile, args.keyfile) #Create new SMTPServer
 
     messageHandler = server.getMessageHandler() #Get Message Handler
     messageHandler.registerLoginCallback(log.loginCallback) #Register callback for login

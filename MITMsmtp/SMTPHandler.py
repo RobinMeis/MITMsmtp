@@ -7,11 +7,15 @@ messages = MessageHandler()
 
 class SMTPHandler(StreamRequestHandler):
     def init(self):
+        #self.connection = self.server.wrapSSL(self.connection)
+        self.rfile = self.connection.makefile()
         self.message = messages.addMessage()
         self.auth = None
+        self.startedTLS = False
+
 
     def readLine(self):
-        return self.rfile.readline().strip().decode("ASCII")
+        return self.rfile.readline().strip()
 
     def writeLine(self, line):
         self.connection.sendall((line + '\r\n').encode("ASCII"))
@@ -22,6 +26,8 @@ class SMTPHandler(StreamRequestHandler):
             self.sendGreeting()
             self.readEHLO()
             self.sendHELLO()
+            if (self.server.STARTTLS == True and self.startedTLS == False):
+                self.STARTTLS()
             self.sendAuthTypes()
             self.readAuth()
             self.readSender()
@@ -52,6 +58,20 @@ class SMTPHandler(StreamRequestHandler):
         self.writeLine("250-smtp.server.com Hello " + self.message.client_name)
         self.writeLine("250-SIZE 1000000")
 
+    def STARTTLS(self):
+        self.writeLine("250-STARTTLS")
+        self.writeLine("250 DSN")
+        line = self.readLine()
+        if (line == "STARTTLS"):
+            self.writeLine("220 2.0.0 Ready to start TLS")
+            self.connection = self.server.wrapSSL(self.connection)
+            self.rfile = self.connection.makefile()
+
+            self.readEHLO()
+            self.sendHELLO()
+        else:
+            raise ValueError("Client does not support STARTTLS")
+
     def sendAuthTypes(self):
         self.writeLine("250 AUTH " + self.server.authHandler.toString())
 
@@ -59,7 +79,7 @@ class SMTPHandler(StreamRequestHandler):
         line = self.readLine()
         authMethod = self.server.authHandler.matchMethod(line)
         if (authMethod == None):
-            raise ValueError("Unsupported Authentication Type requested by client")
+            raise ValueError("Unsupported Authentication Type requested by client: " + line)
 
         self.auth = authMethod(self, line)
         username = self.auth.getUsername()
