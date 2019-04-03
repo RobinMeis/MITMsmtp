@@ -40,7 +40,7 @@ That's it!
 `sudo python3 setup.py install`
 
 ## Usage
-*This section describes the command line usage. For the API reference, please refere to API section.*
+*This section describes the command line usage. For the API reference, please refer to API section.*
 
 Running `MITMsmtp --help` will give you an overview about the available command line switches:
 ```
@@ -97,9 +97,15 @@ Running `MITMsmtp --log logdir` will enable logging. Please make sure that the d
 ### Encryption
 Some clients fallback to unencrypted mode if you don't offer SSL/TLS. Always make sure to test this! For clients which don't fallback, you may want to test the encrypted mode. Please keep in mind, that a correctly configured client won't be vulnerable to this attack. You will be unable to fake a trusted certificate for a validated common name and thus the client will stop connection before sending credentials. However some clients don't implement proper certificate validation. This is where this attack starts.
 
-To run MITMsmtp in encrypted mode you need a certificate and the according key. You can use the example in certs/. For some clients you might need to generate own certificates to bypass certain validation steps.
+#### STARTTLS
+STARTTLS is available for MTIMsmtp. When enabled it will enforce STARTTLS.
 
-To use MITMsmtp with the example certificates run `MITMsmtp --certfile certs/MITMsmtp.crt --keyfile certs/MITMsmtp.key`.
+To use MITMsmtp with the example certificates run `MITMsmtp --STARTTLS --certfile certs/MITMsmtp.crt --keyfile certs/MITMsmtp.key`.
+
+#### SSL/TLS
+To run MITMsmtp in SSL mode you need a certificate and the according key. You can use the example in certs/. For some clients you might need to generate own certificates to bypass certain validation steps.
+
+To use MITMsmtp with the example certificates run `MITMsmtp --SSL --certfile certs/MITMsmtp.crt --keyfile certs/MITMsmtp.key`.
 
 ## MITM
 This section shows the usage of MITMsmtp if you are able to intercept the victims traffic.
