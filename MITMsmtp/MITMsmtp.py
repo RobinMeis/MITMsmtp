@@ -7,7 +7,7 @@ class MITMsmtp:
         self.server_address = server_address
         self.port = port
         self.authHandler = authHandler
-        self.STARTTLS = SSL
+        self.STARTTLS = STARTTLS
         self.SSL = SSL
         self.certfile = certfile
         self.keyfile = keyfile
