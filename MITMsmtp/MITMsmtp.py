@@ -1,6 +1,7 @@
 from .SMTPServer import SMTPServer
 from .SMTPHandler import SMTPHandler, messages
 import threading
+import os
 
 class MITMsmtp:
     def __init__(self, server_address, port, authHandler, STARTTLS=False, SSL=False, certfile=None, keyfile=None):
@@ -17,8 +18,11 @@ class MITMsmtp:
     def start(self):
         if (self.thread == None):
             if (self.SSL):
-                if (self.certfile == None or self.keyfile == None):
-                    raise ValueError("Please specify a Certfile and a Keyfile when using SSL")
+                if (self.certfile == None or self.keyfile == None): #Use default certificates if not specified
+                    print("[INFO] Using default certificates")
+                    self.certfile = os.path.dirname(os.path.realpath(__file__)) + "/certs/MITMsmtp.crt"
+                    self.keyfile = os.path.dirname(os.path.realpath(__file__)) + "/certs/MITMsmtp.key"
+
             self.SMTPServer = SMTPServer((self.server_address, self.port), SMTPHandler, self.certfile, self.keyfile, self.STARTTLS, self.SSL)
 
             self.SMTPServer.authHandler = self.authHandler

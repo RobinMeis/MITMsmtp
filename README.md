@@ -58,8 +58,9 @@ optional arguments:
   --port PORT           Port to listen on (default: 8587)
   --STARTTLS            Enables and requires STARTTLS Support (default: False)
   --SSL                 Enables SSL Support (default: False)
-  --certfile CERTFILE   Certfificate for SSL Mode
-  --keyfile KEYFILE     Key for SSL Mode
+  --certfile CERTFILE   Certfificate for SSL Mode (default: Default MITMsmtp
+                        Certificate)
+  --keyfile KEYFILE     Key for SSL Mode (default: Default MITMsmtp Keyfile)
   --log LOG             Directory for mails and credentials
   --disable-auth-plain  Disables authentication using method PLAIN (default:
                         False)
