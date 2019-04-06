@@ -18,7 +18,7 @@ class MITMsmtp:
 
     def start(self):
         if (self.thread == None):
-            if (self.SSL):
+            if (self.SSL or self.STARTTLS):
                 if (self.certfile == None or self.keyfile == None): #Use default certificates if not specified
                     print("[INFO] Using default certificates")
                     self.certfile = os.path.dirname(os.path.realpath(__file__)) + "/certs/MITMsmtp.crt"
