@@ -4,7 +4,7 @@ import threading
 import os
 
 class MITMsmtp:
-    def __init__(self, server_address, port, authHandler, STARTTLS=False, SSL=False, certfile=None, keyfile=None):
+    def __init__(self, server_address, port, authHandler, STARTTLS=False, SSL=False, certfile=None, keyfile=None, printLines=False):
         self.server_address = server_address
         self.port = port
         self.authHandler = authHandler
@@ -12,6 +12,7 @@ class MITMsmtp:
         self.SSL = SSL
         self.certfile = certfile
         self.keyfile = keyfile
+        self.printLines = printLines
         self.SMTPServer = None
         self.thread = None
 
@@ -23,7 +24,7 @@ class MITMsmtp:
                     self.certfile = os.path.dirname(os.path.realpath(__file__)) + "/certs/MITMsmtp.crt"
                     self.keyfile = os.path.dirname(os.path.realpath(__file__)) + "/certs/MITMsmtp.key"
 
-            self.SMTPServer = SMTPServer((self.server_address, self.port), SMTPHandler, self.certfile, self.keyfile, self.STARTTLS, self.SSL)
+            self.SMTPServer = SMTPServer((self.server_address, self.port), SMTPHandler, self.certfile, self.keyfile, self.STARTTLS, self.SSL, self.printLines)
 
             self.SMTPServer.authHandler = self.authHandler
             self.thread = threading.Thread(target=self.SMTPServer.serve_forever)

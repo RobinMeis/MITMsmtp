@@ -48,6 +48,7 @@ def main(args=None):
     parser.add_argument('--log', default=None, help='Directory for mails and credentials')
     parser.add_argument('--disable-auth-plain', action='store_true', help='Disables authentication using method PLAIN (default: False)')
     parser.add_argument('--disable-auth-login', action='store_true', help='Disables authentication using method LOGIN (default: False)')
+    parser.add_argument('--print-lines', action='store_true', help='Prints communication between Client and MITMsmtp (default: False)')
 
     args=parser.parse_args()
     log = MailLog(args.log)
@@ -58,7 +59,7 @@ def main(args=None):
     if (not args.disable_auth_login):
         auth.addAuthMethod(authLogin)
 
-    server = MITMsmtp.MITMsmtp(args.server_address, args.port, auth, args.STARTTLS, args.SSL, args.certfile, args.keyfile) #Create new SMTPServer
+    server = MITMsmtp.MITMsmtp(args.server_address, args.port, auth, args.STARTTLS, args.SSL, args.certfile, args.keyfile, args.print_lines) #Create new SMTPServer
 
     messageHandler = server.getMessageHandler() #Get Message Handler
     messageHandler.registerLoginCallback(log.loginCallback) #Register callback for login

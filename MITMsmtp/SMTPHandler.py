@@ -7,7 +7,6 @@ messages = MessageHandler()
 
 class SMTPHandler(StreamRequestHandler):
     def init(self):
-        #self.connection = self.server.wrapSSL(self.connection)
         self.rfile = self.connection.makefile()
         self.message = messages.addMessage()
         self.auth = None
@@ -15,9 +14,14 @@ class SMTPHandler(StreamRequestHandler):
 
 
     def readLine(self):
-        return self.rfile.readline().strip()
+        line = self.rfile.readline().strip()
+        if (self.server.printLines):
+            print("C:" + line)
+        return line
 
     def writeLine(self, line):
+        if (self.server.printLines):
+            print("S:" + line)
         self.connection.sendall((line + '\r\n').encode("ASCII"))
 
     def handle(self):

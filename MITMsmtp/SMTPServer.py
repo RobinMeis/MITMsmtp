@@ -9,6 +9,7 @@ class SMTPServer(TCPServer):
                  keyfile=None,
                  STARTTLS=False,
                  SSL=False,
+                 printLines=False,
                  ssl_version=ssl.PROTOCOL_TLSv1,
                  bind_and_activate=True):
         TCPServer.__init__(self, server_address, RequestHandlerClass, bind_and_activate)
@@ -16,6 +17,7 @@ class SMTPServer(TCPServer):
         self.SSL = SSL
         self.certfile = certfile
         self.keyfile = keyfile
+        self.printLines = printLines
         self.ssl_version = ssl_version
 
         if (self.STARTTLS and self.SSL):
