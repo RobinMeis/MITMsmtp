@@ -104,12 +104,12 @@ Some clients fallback to unencrypted mode if you don't offer SSL/TLS. Always mak
 #### STARTTLS
 STARTTLS is available for MTIMsmtp. When enabled it will enforce STARTTLS.
 
-To use MITMsmtp with the example certificates run `MITMsmtp --STARTTLS --certfile certs/MITMsmtp.crt --keyfile certs/MITMsmtp.key`.
+To use MITMsmtp with the example certificates run `MITMsmtp --STARTTLS`.
 
 #### SSL/TLS
 To run MITMsmtp in SSL mode you need a certificate and the according key. You can use the example in certs/. For some clients you might need to generate own certificates to bypass certain validation steps.
 
-To use MITMsmtp with the example certificates run `MITMsmtp --SSL --certfile certs/MITMsmtp.crt --keyfile certs/MITMsmtp.key`.
+To use MITMsmtp with the example certificates run `MITMsmtp --SSL`.
 
 ## MITM
 This section shows the usage of MITMsmtp if you are able to intercept the victims traffic.
