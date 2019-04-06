@@ -1,4 +1,5 @@
 import setuptools
+import os
 
 with open("README.md", "r") as fh:
     long_description = fh.read()
@@ -21,4 +22,5 @@ setuptools.setup(
             'MITMsmtp = MITMsmtp.__main__:main'
         ]
     },
+    include_package_data=True,
 )
