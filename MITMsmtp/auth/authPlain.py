@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 from .authMethod import authMethod
 import re
 import base64

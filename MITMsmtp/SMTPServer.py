@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 from socketserver import TCPServer, ThreadingMixIn, StreamRequestHandler
 import ssl
 

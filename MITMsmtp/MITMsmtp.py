@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 from .SMTPServer import SMTPServer
 from .SMTPHandler import SMTPHandler, messages
 import threading

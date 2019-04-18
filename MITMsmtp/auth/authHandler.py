@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 class authHandler:
     def __init__(self):
         self.authMethods = set()

@@ -1,6 +1,7 @@
-from MITMsmtp import MITMsmtp
+#!/usr/bin/env python3
 
-from MITMsmtp.auth.authHandler import authHandler #Authentication methods
+from MITMsmtp import MITMsmtp
+from MITMsmtp.auth.authHandler import authHandler
 from MITMsmtp.auth.authLogin import authLogin
 from MITMsmtp.auth.authPlain import authPlain
 
