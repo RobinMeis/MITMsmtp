@@ -5,8 +5,39 @@ from .SMTPHandler import SMTPHandler, messages
 import threading
 import os
 
+"""
+MITMsmtp class for user interaction
+"""
 class MITMsmtp:
-    def __init__(self, server_address, port, authHandler, STARTTLS=False, SSL=False, certfile=None, keyfile=None, printLines=False):
+    """ Creates a new MITMsmtp object
+    @param server_address: The address to listen on
+    @type server_address: str
+    @param authHandler: The authHandler Object which contains the supported authentication methods
+    @type authHandler: authHandler
+    @param port: Port to listen on
+    @type port: int
+    @param STARTTLS: Enable server support for STARTTLS (not compatible with SSL/TLS)
+    @type STARTTLS: bool
+    @param SSL: Enable server support for SSL/TLS (not compatible with STARTTLS)
+    @type SSL: bool
+    @param certfile: Path to the certfile to be used
+    @type certfile: str
+    @param keyfile: Path to the keyfile to be used
+    @type keyfile: str
+    @param printLines: Print communication between client and server on command line
+    @type printLines: bool
+
+    @return: Returns a new SMTPServer object
+    """
+    def __init__(self,
+                    server_address,
+                    port,
+                    authHandler,
+                    STARTTLS=False,
+                    SSL=False,
+                    certfile=None,
+                    keyfile=None,
+                    printLines=False):
         self.server_address = server_address
         self.port = port
         self.authHandler = authHandler
@@ -18,6 +49,9 @@ class MITMsmtp:
         self.SMTPServer = None
         self.thread = None
 
+    """
+    Starts MITMsmtp Server
+    """
     def start(self):
         if (self.thread == None):
             if (self.SSL or self.STARTTLS):
@@ -34,6 +68,9 @@ class MITMsmtp:
         else:
             raise ValueError("SMTPServer is already running")
 
+    """
+    Stops MTIMsmtp Server
+    """
     def stop(self):
         if (self.SMTPServer != None and self.thread != None):
             self.SMTPServer.shutdown()
