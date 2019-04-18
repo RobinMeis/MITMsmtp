@@ -24,10 +24,15 @@ class authHandler:
     """Removes an authentication method
     @type method: authMethod
     @param method: Class for authentication method
-    @returns: None
+    @returns: True on success. If method was not available yet, it will return false
     """
     def removeAuthMethod(self, method):
-        self.authMethods.remove(method)
+        try:
+            self.authMethods.remove(method)
+        except KeyError:
+            return False
+        else:
+            return True
 
     """Creates a speces delimeted string of all available authentication methods for sending method list to client
     @returns: String of authentication methods
