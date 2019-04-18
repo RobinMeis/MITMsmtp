@@ -8,6 +8,9 @@ Authentication methods are stored in MITMsmtp/auth
 
 class authHandler:
     """Creates a new handler object
+
+    Called for each new authentication request
+
     @returns: authHandler object
     """
     def __init__(self):
