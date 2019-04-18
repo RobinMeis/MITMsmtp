@@ -40,8 +40,9 @@ That's it!
 `sudo python3 setup.py install`
 
 ## Usage
-*This section describes the command line usage. For the API reference, please refer to API section.*
+*MITMsmtp can be used as standalone command line application and offers an easy to use Python3 API to integrate in your own project*
 
+### Command Line
 Running `MITMsmtp --help` will give you an overview about the available command line switches:
 ```
 usage: MITMsmtp [-h] [--server_address SERVER_ADDRESS] [--port PORT]
@@ -110,6 +111,9 @@ To use MITMsmtp with the example certificates run `MITMsmtp --STARTTLS`.
 To run MITMsmtp in SSL mode you need a certificate and the according key. You can use the example in certs/. For some clients you might need to generate own certificates to bypass certain validation steps.
 
 To use MITMsmtp with the example certificates run `MITMsmtp --SSL`.
+
+### API
+For an example you might want to consult `MITMsmtp/__main__.py`. More docs will be available soon!
 
 ## MITM
 This section shows the usage of MITMsmtp if you are able to intercept the victims traffic.
