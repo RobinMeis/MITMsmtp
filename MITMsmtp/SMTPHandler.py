@@ -1,11 +1,7 @@
 #!/usr/bin/env python3
 
 from socketserver import StreamRequestHandler
-from .messageHandler import messageHandler
 import re
-
-global messages
-messages = messageHandler()
 
 """
 Connection Handler for SMTPServer
@@ -16,7 +12,7 @@ class SMTPHandler(StreamRequestHandler):
     """
     def init(self):
         self.rfile = self.connection.makefile()
-        self.message = messages.addMessage()
+        self.message = self.server.messageHandler.addMessage()
         self.auth = None
         self.startedTLS = False
 

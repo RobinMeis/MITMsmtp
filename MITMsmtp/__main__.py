@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 from MITMsmtp import MITMsmtp
+from MITMsmtp.messageHandler import messageHandler
 from MITMsmtp.auth.authHandler import authHandler
 from MITMsmtp.auth.authLogin import authLogin
 from MITMsmtp.auth.authPlain import authPlain
@@ -80,6 +81,7 @@ def main(args=None):
     args=parser.parse_args()
 
     log = MailLog(args.log) #Create logHandler
+    messages = messageHandler() #Create messageHandler
 
     auth = authHandler() #Initialize supported authMethods
     if (not args.disable_auth_plain):
@@ -91,15 +93,15 @@ def main(args=None):
                                 args.port,
                                 args.server_name,
                                 auth,
+                                messages,
                                 args.STARTTLS,
                                 args.SSL,
                                 args.certfile,
                                 args.keyfile,
                                 args.print_lines) #Create new SMTPServer
 
-    messageHandler = server.getMessageHandler() #Get Message Handler
-    messageHandler.registerLoginCallback(log.loginCallback) #Register callback for login
-    messageHandler.registerMessageCallback(log.messageCallback) #Register callback for complete messages
+    messages.registerLoginCallback(log.loginCallback) #Register callback for login
+    messages.registerMessageCallback(log.messageCallback) #Register callback for complete messages
 
     server.start() #Start SMTPServer
     print("Waiting for messages\n")

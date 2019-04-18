@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 from .SMTPServer import SMTPServer
-from .SMTPHandler import SMTPHandler, messages
+from .SMTPHandler import SMTPHandler
 import threading
 import os
 
@@ -36,6 +36,7 @@ class MITMsmtp:
                     port,
                     server_name,
                     authHandler,
+                    messageHandler,
                     STARTTLS=False,
                     SSL=False,
                     certfile=None,
@@ -45,6 +46,7 @@ class MITMsmtp:
         self.port = port
         self.server_name = server_name
         self.authHandler = authHandler
+        self.messageHandler = messageHandler
         self.STARTTLS = STARTTLS
         self.SSL = SSL
         self.certfile = certfile
@@ -67,13 +69,14 @@ class MITMsmtp:
             self.SMTPServer = SMTPServer((self.server_address, self.port),
                                             self.server_name,
                                             SMTPHandler,
+                                            self.authHandler,
+                                            self.messageHandler,
                                             self.certfile,
                                             self.keyfile,
                                             self.STARTTLS,
                                             self.SSL,
                                             self.printLines)
 
-            self.SMTPServer.authHandler = self.authHandler
             self.thread = threading.Thread(target=self.SMTPServer.serve_forever)
             self.thread.start()
         else:
@@ -90,6 +93,3 @@ class MITMsmtp:
             self.SMTPServer.server_close()
         else:
             raise ValueError("MITMsmtp is currently not running")
-
-    def getMessageHandler(self):
-        return messages
