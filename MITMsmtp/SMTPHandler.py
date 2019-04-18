@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 from socketserver import StreamRequestHandler
-from .messageHandler import MessageHandler
+from .messageHandler import messageHandler
 import re
 
 global messages
