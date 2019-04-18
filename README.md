@@ -46,9 +46,9 @@ That's it!
 Running `MITMsmtp --help` will give you an overview about the available command line switches:
 ```
 usage: MITMsmtp [-h] [--server_address SERVER_ADDRESS] [--port PORT]
-                [--STARTTLS] [--SSL] [--certfile CERTFILE] [--keyfile KEYFILE]
-                [--log LOG] [--disable-auth-plain] [--disable-auth-login]
-                [--print-lines]
+                [--server_name SERVER_NAME] [--STARTTLS] [--SSL]
+                [--certfile CERTFILE] [--keyfile KEYFILE] [--log LOG]
+                [--disable-auth-plain] [--disable-auth-login] [--print-lines]
 
 MITMsmtp is an Evil SMTP Server for pentesting SMTP clients to catch login
 credentials and mails sent over plain or SSL encrypted connections.
@@ -58,6 +58,8 @@ optional arguments:
   --server_address SERVER_ADDRESS
                         IP Address to listen on (default: all)
   --port PORT           Port to listen on (default: 8587)
+  --server_name SERVER_NAME
+                        FQDN of Server (default: smtp.example.com)
   --STARTTLS            Enables and requires STARTTLS Support (default: False)
   --SSL                 Enables SSL Support (default: False)
   --certfile CERTFILE   Certfificate for SSL Mode (default: Default MITMsmtp

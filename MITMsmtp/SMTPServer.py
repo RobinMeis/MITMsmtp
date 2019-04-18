@@ -10,6 +10,8 @@ class SMTPServer(TCPServer):
     """ Creates a new SMTPServer object
     @param server_address: The address to listen on
     @type server_address: str
+    @param server_name: Servers FQDN to send to client
+    @type server_address: str
     @param RequestHandlerClass: The SMTPHandler Class which will handle requests
     @type RequestHandlerClass: SMTPHandler
     @param certfile: Path to the certfile to be used
@@ -31,6 +33,7 @@ class SMTPServer(TCPServer):
     """
     def __init__(self,
                  server_address,
+                 server_name,
                  RequestHandlerClass,
                  certfile=None,
                  keyfile=None,
@@ -39,7 +42,8 @@ class SMTPServer(TCPServer):
                  printLines=False,
                  ssl_version=ssl.PROTOCOL_TLSv1,
                  bind_and_activate=True):
-        TCPServer.__init__(self, server_address, RequestHandlerClass, bind_and_activate)
+        TCPServer.__init__(self, server_address, RequestHandlerClass, bind_and_activate) #TODO: move down!
+        self.name = server_name
         self.STARTTLS = STARTTLS
         self.SSL = SSL
         self.certfile = certfile

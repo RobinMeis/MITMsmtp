@@ -69,7 +69,7 @@ class SMTPHandler(StreamRequestHandler):
     Send a greeting message
     """
     def sendGreeting(self):
-        self.writeLine("220 smtp.server.com Simple Mail Transfer Service Ready")
+        self.writeLine("220 %s Simple Mail Transfer Service Ready" % (self.server.name,))
 
     """
     Read EHLO response. Raises an exception if EHLO is invalid
@@ -85,7 +85,7 @@ class SMTPHandler(StreamRequestHandler):
     Send HELLO to client
     """
     def sendHELLO(self):
-        self.writeLine("250-smtp.server.com Hello " + self.message.client_name)
+        self.writeLine("250-%s Hello %s" % (self.server.name, self.message.client_name,))
         self.writeLine("250-SIZE 1000000")
 
     """

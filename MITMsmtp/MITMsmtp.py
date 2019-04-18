@@ -12,10 +12,12 @@ class MITMsmtp:
     """ Creates a new MITMsmtp object
     @param server_address: The address to listen on
     @type server_address: str
-    @param authHandler: The authHandler Object which contains the supported authentication methods
-    @type authHandler: authHandler
     @param port: Port to listen on
     @type port: int
+    @param server_name: Servers FQDN to send to client
+    @type server_address: str
+    @param authHandler: The authHandler Object which contains the supported authentication methods
+    @type authHandler: authHandler
     @param STARTTLS: Enable server support for STARTTLS (not compatible with SSL/TLS)
     @type STARTTLS: bool
     @param SSL: Enable server support for SSL/TLS (not compatible with STARTTLS)
@@ -32,6 +34,7 @@ class MITMsmtp:
     def __init__(self,
                     server_address,
                     port,
+                    server_name,
                     authHandler,
                     STARTTLS=False,
                     SSL=False,
@@ -40,6 +43,7 @@ class MITMsmtp:
                     printLines=False):
         self.server_address = server_address
         self.port = port
+        self.server_name = server_name
         self.authHandler = authHandler
         self.STARTTLS = STARTTLS
         self.SSL = SSL
@@ -60,7 +64,14 @@ class MITMsmtp:
                     self.certfile = os.path.dirname(os.path.realpath(__file__)) + "/certs/MITMsmtp.crt"
                     self.keyfile = os.path.dirname(os.path.realpath(__file__)) + "/certs/MITMsmtp.key"
 
-            self.SMTPServer = SMTPServer((self.server_address, self.port), SMTPHandler, self.certfile, self.keyfile, self.STARTTLS, self.SSL, self.printLines)
+            self.SMTPServer = SMTPServer((self.server_address, self.port),
+                                            self.server_name,
+                                            SMTPHandler,
+                                            self.certfile,
+                                            self.keyfile,
+                                            self.STARTTLS,
+                                            self.SSL,
+                                            self.printLines)
 
             self.SMTPServer.authHandler = self.authHandler
             self.thread = threading.Thread(target=self.SMTPServer.serve_forever)
