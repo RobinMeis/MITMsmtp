@@ -74,8 +74,12 @@ class SMTPHandler(StreamRequestHandler):
         line = self.readLine()
         match = re.match("EHLO (.*)", line)
         if (match == None):
-            raise ValueError("Invalid EHLO sent by client")
-        self.message.setClientName(match.group(1))
+            if (line == "EHLO"): #Handle empty clientname
+                self.message.setClientName("")
+            else:
+                raise ValueError("Invalid EHLO sent by client")
+        else:
+            self.message.setClientName(match.group(1))
 
     """
     Send HELLO to client
