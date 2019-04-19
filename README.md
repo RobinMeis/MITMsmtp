@@ -1,5 +1,5 @@
 # MITMsmtp
-MITMsmtp is an Evil SMTP Server for pentesting SMTP clients to catch login credentials and mails sent over plain or SSL/TLS encrypted connections. The idea is to catch sensitive emails sent by clients which are not correctly verifying the SMTP servers identity in SSL/TLS mode. MITMsmtp will catch username and password as well as the message itself. This way you might gain access to a companies mail server or catch information like password reset tokens or verification links sent by applications. Using those information you might gain more and more access to a system. MITMsmtp has been built to work together with MITM Attacks like ARP Spoofing to terminate encrypted connections.
+MITMsmtp is an Evil SMTP Server for pentesting SMTP clients to catch login credentials and mails sent over plain or SSL/TLS encrypted connections. The idea is to catch sensitive emails sent by clients which are not correctly verifying the SMTP servers identity in SSL/TLS mode. MITMsmtp will catch username and password as well as the message itself. This way you might gain access to a companies mail server or catch information like password reset tokens or verification links sent by applications. Using those information you might gain more and more access to a system. MITMsmtp has been built to work together with MITM Attacks like ARP Spoofing to terminate encrypted connections. MITMsmtp could be used as a honeypot as well.
 
 MITMsmtp offers a command line tool as well as an open Python3 API which can be used to build own tools for automated pentesting of applications.
 
@@ -9,15 +9,15 @@ MITMsmtp has been tested against the SMTP client of Thunderbird 60.5.3 and some 
 ### Connection Security
 MITMsmtp supports the following connection security modes:
 * Plaintext
+* STARTTLS
 * SSL/TLS
-* STARTTLS (under development, not yet working)
 
 ### Login Methods
 MITMsmtp supports the following login methods:
 * PLAIN
-* LOGIN (under development, not yet working)
+* LOGIN
 
-Other methods are not supported as we want to extract the cleartext password. As this might be a problem for restrictive clients, it is planned to add support for MD5 later. However NTLM or Kerberos can't be supported as these methods require the server to know the cleartext password.
+Challenge-Response based authentication methods like CRAM-MD5, NTLM or Kerberos can't be supported as these methods require the server to know the cleartext password.
 
 ## Setup
 MITMsmtp requires Python3 and setuptools. You might want to install git as well. Use the following command on Debian:
@@ -40,13 +40,15 @@ That's it!
 `sudo python3 setup.py install`
 
 ## Usage
-*This section describes the command line usage. For the API reference, please refere to API section.*
+*MITMsmtp can be used as standalone command line application and offers an easy to use Python3 API to integrate in your own project*
 
+### Command Line
 Running `MITMsmtp --help` will give you an overview about the available command line switches:
 ```
 usage: MITMsmtp [-h] [--server_address SERVER_ADDRESS] [--port PORT]
-                [--SSL SSL] [--certfile CERTFILE] [--keyfile KEYFILE]
-                [--log LOG]
+                [--server_name SERVER_NAME] [--STARTTLS] [--SSL]
+                [--certfile CERTFILE] [--keyfile KEYFILE] [--log LOG]
+                [--disable-auth-plain] [--disable-auth-login] [--print-lines]
 
 MITMsmtp is an Evil SMTP Server for pentesting SMTP clients to catch login
 credentials and mails sent over plain or SSL encrypted connections.
@@ -56,10 +58,20 @@ optional arguments:
   --server_address SERVER_ADDRESS
                         IP Address to listen on (default: all)
   --port PORT           Port to listen on (default: 8587)
-  --SSL SSL             Enables SSL Support (default: False)
-  --certfile CERTFILE   Certfificate for SSL Mode
-  --keyfile KEYFILE     Key for SSL Mode
+  --server_name SERVER_NAME
+                        FQDN of Server (default: smtp.example.com)
+  --STARTTLS            Enables and requires STARTTLS Support (default: False)
+  --SSL                 Enables SSL Support (default: False)
+  --certfile CERTFILE   Certfificate for SSL Mode (default: Default MITMsmtp
+                        Certificate)
+  --keyfile KEYFILE     Key for SSL Mode (default: Default MITMsmtp Keyfile)
   --log LOG             Directory for mails and credentials
+  --disable-auth-plain  Disables authentication using method PLAIN (default:
+                        False)
+  --disable-auth-login  Disables authentication using method LOGIN (default:
+                        False)
+  --print-lines         Prints communication between Client and MITMsmtp
+                        (default: False)
 ```
 
 When running `MITMsmtp` without any parameters it will start an unencrypted SMTP server on port 8587 on all interfaces. Pointing Thunderbird or any other SMTP client will give you the ability to test MITMsmtp. Please keep in mind that the default port MITMsmtp differs from the SMTP default port.
@@ -92,9 +104,18 @@ Running `MITMsmtp --log logdir` will enable logging. Please make sure that the d
 ### Encryption
 Some clients fallback to unencrypted mode if you don't offer SSL/TLS. Always make sure to test this! For clients which don't fallback, you may want to test the encrypted mode. Please keep in mind, that a correctly configured client won't be vulnerable to this attack. You will be unable to fake a trusted certificate for a validated common name and thus the client will stop connection before sending credentials. However some clients don't implement proper certificate validation. This is where this attack starts.
 
-To run MITMsmtp in encrypted mode you need a certificate and the according key. You can use the example in certs/. For some clients you might need to generate own certificates to bypass certain validation steps.
+#### STARTTLS
+STARTTLS is available for MTIMsmtp. When enabled it will enforce STARTTLS.
 
-To use MITMsmtp with the example certificates run `MITMsmtp --certfile certs/MITMsmtp.crt --keyfile certs/MITMsmtp.key`.
+To use MITMsmtp with the example certificates run `MITMsmtp --STARTTLS`.
+
+#### SSL/TLS
+To run MITMsmtp in SSL mode you need a certificate and the according key. You can use the example in certs/. For some clients you might need to generate own certificates to bypass certain validation steps.
+
+To use MITMsmtp with the example certificates run `MITMsmtp --SSL`.
+
+### API
+For an example you might want to consult `MITMsmtp/__main__.py`. More docs will be available soon!
 
 ## MITM
 This section shows the usage of MITMsmtp if you are able to intercept the victims traffic.
@@ -131,3 +152,5 @@ As we perform a port forward, MITMsmtp can't determine the original packet desti
 [1] https://tools.ietf.org/html/rfc5321
 
 [2] http://www.samlogic.net/articles/smtp-commands-reference-auth.htm
+
+[3] https://tools.ietf.org/html/rfc3207
