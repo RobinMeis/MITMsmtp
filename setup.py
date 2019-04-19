@@ -8,7 +8,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="MITMsmtp",
-    version="0.0.2",
+    version="0.0.3-dev",
     author="Robin Meis",
     author_email="blog@smartnoob.de",
     description="An evil SMTP Server for client pentesting",
