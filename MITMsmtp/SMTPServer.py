@@ -14,6 +14,10 @@ class SMTPServer(TCPServer):
     @type server_address: str
     @param RequestHandlerClass: The SMTPHandler Class which will handle requests
     @type RequestHandlerClass: SMTPHandler
+    @param authHandler: The authHandler Object which contains the supported authentication methods
+    @type authHandler: authHandler
+    @param messageHandler: The messageHandler Object which will be used for storing messages
+    @type messageHandler: messageHandler
     @param certfile: Path to the certfile to be used
     @type certfile: str
     @param keyfile: Path to the keyfile to be used
@@ -35,6 +39,8 @@ class SMTPServer(TCPServer):
                  server_address,
                  server_name,
                  RequestHandlerClass,
+                 authHandler,
+                 messageHandler,
                  certfile=None,
                  keyfile=None,
                  STARTTLS=False,
@@ -44,6 +50,8 @@ class SMTPServer(TCPServer):
                  bind_and_activate=True):
         TCPServer.__init__(self, server_address, RequestHandlerClass, bind_and_activate) #TODO: move down!
         self.name = server_name
+        self.authHandler = authHandler
+        self.messageHandler = messageHandler
         self.STARTTLS = STARTTLS
         self.SSL = SSL
         self.certfile = certfile
