@@ -48,7 +48,8 @@ Running `MITMsmtp --help` will give you an overview about the available command 
 usage: MITMsmtp [-h] [--server_address SERVER_ADDRESS] [--port PORT]
                 [--server_name SERVER_NAME] [--STARTTLS] [--SSL]
                 [--certfile CERTFILE] [--keyfile KEYFILE] [--log LOG]
-                [--disable-auth-plain] [--disable-auth-login] [--print-lines]
+                [--disable-auth-plain] [--disable-auth-login]
+                [--disable-auth-NTLM] [--print-lines]
 
 MITMsmtp is an Evil SMTP Server for pentesting SMTP clients to catch login
 credentials and mails sent over plain or SSL encrypted connections.
@@ -69,6 +70,8 @@ optional arguments:
   --disable-auth-plain  Disables authentication using method PLAIN (default:
                         False)
   --disable-auth-login  Disables authentication using method LOGIN (default:
+                        False)
+  --disable-auth-NTLM   Disables authentication using method NTLM (default:
                         False)
   --print-lines         Prints communication between Client and MITMsmtp
                         (default: False)
@@ -154,3 +157,9 @@ As we perform a port forward, MITMsmtp can't determine the original packet desti
 [2] http://www.samlogic.net/articles/smtp-commands-reference-auth.htm
 
 [3] https://tools.ietf.org/html/rfc3207
+
+[4] https://docs.microsoft.com/en-us/openspecs/windows_protocols/ms-nlmp/b38c36ed-2804-4868-a9ff-8dd3182128e4
+
+[5] https://winprotocoldoc.blob.core.windows.net/productionwindowsarchives/MS-NLMP/%5bMS-NLMP%5d.pdf
+
+[6] https://docs.microsoft.com/en-us/openspecs/windows_protocols/ms-smtpntlm/a048c79f-7597-401b-bcb4-521d682de765

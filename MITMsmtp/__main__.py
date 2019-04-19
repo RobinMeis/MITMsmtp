@@ -5,6 +5,7 @@ from MITMsmtp.messageHandler import messageHandler
 from MITMsmtp.auth.authHandler import authHandler
 from MITMsmtp.auth.authLogin import authLogin
 from MITMsmtp.auth.authPlain import authPlain
+from MITMsmtp.auth.authNTLM import authNTLM
 
 import argparse, sys
 from datetime import datetime
@@ -85,6 +86,7 @@ def main(args=None):
     parser.add_argument('--log', default=None, help='Directory for mails and credentials')
     parser.add_argument('--disable-auth-plain', action='store_true', help='Disables authentication using method PLAIN (default: False)')
     parser.add_argument('--disable-auth-login', action='store_true', help='Disables authentication using method LOGIN (default: False)')
+    parser.add_argument('--disable-auth-NTLM', action='store_true', help='Disables authentication using method NTLM (default: False)')
     parser.add_argument('--print-lines', action='store_true', help='Prints communication between Client and MITMsmtp (default: False)')
     args=parser.parse_args()
 
@@ -96,6 +98,8 @@ def main(args=None):
         auth.addAuthMethod(authPlain)
     if (not args.disable_auth_login):
         auth.addAuthMethod(authLogin)
+    if (not args.disable_auth_NTLM):
+        auth.addAuthMethod(authNTLM)
 
     server = MITMsmtp.MITMsmtp(args.server_address,
                                 args.port,
