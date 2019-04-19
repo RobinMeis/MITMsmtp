@@ -119,8 +119,11 @@ class SMTPHandler(StreamRequestHandler):
     def readAuth(self):
         line = self.readLine()
         authMethod = self.server.authHandler.matchMethod(line)
-        if (authMethod == None):
-            raise ValueError("Unsupported Authentication Type requested by client: " + line)
+        if (authMethod == None): #No supported auth method found
+            if (line == "QUIT"):
+                raise ValueError("The client closed the connection due to no common authentication methods")
+            else:
+                raise ValueError("Unsupported Authentication Type requested by client: " + line)
 
         self.auth = authMethod(self, line)
         username = self.auth.getUsername()
