@@ -16,6 +16,12 @@ class SMTPHandler(StreamRequestHandler):
         self.auth = None
         self.startedTLS = False
 
+        ip, port = self.connection.getpeername()
+        self.message.setClientIP(ip)
+
+        if (self.server.printLines):
+            print("[New connection from %s]" % (self.message.clientIP,))
+
     """ Reads a line from TCP Stream
     @return: Read line
     """

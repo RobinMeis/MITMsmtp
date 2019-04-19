@@ -41,14 +41,22 @@ class MailLog:
         print("Password: " + password + "\n")
         if (self.directory != None):
             with open(self.directory + "/credentials.log", "a+") as log:
-                log.write("[%s] %s:%s (%s)\n" % (datetime.now().strftime("%d.%m.%Y %H:%M:%S"), username, password, message.client_name))
+                log.write("[%s] - %s - %s:%s (%s)\n" % (datetime.now().strftime("%d.%m.%Y %H:%M:%S"),
+                                                        message.clientIP,
+                                                        username,
+                                                        password,
+                                                        message.client_name))
 
     """ Will be called on new message. Prints basic information on terminal and logs to logfile
     @param message: Message Object
     @type message: Message
     """
     def messageCallback(self, message):
-        output = """=== Complete Message ===\nUsername  : %s\nPassword  : %s\nClient    : %s\nSender    : %s\n""" % (message.username, message.password, message.client_name, message.sender)
+        output = """=== Complete Message ===%s\nIP        : %s\n\nUsername  : %s\nPassword  : %s\nClient    : %s\nSender    : %s\n""" % (message.clientIP,
+                                                                                                                                         message.username,
+                                                                                                                                         message.password,
+                                                                                                                                         message.client_name,
+                                                                                                                                         message.sender)
 
         recipient_count = 0
         for recipient in message.recipients:
