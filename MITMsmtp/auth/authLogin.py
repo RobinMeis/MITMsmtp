@@ -43,7 +43,7 @@ class authLogin (authMethod):
     """
     @staticmethod
     def matchMethod(authLine):
-        match = re.match("AUTH LOGIN$", authLine)
+        match = re.match("^AUTH LOGIN", authLine, re.IGNORECASE)
         if (match == None):
             return False
         else:

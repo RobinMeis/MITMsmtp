@@ -16,6 +16,12 @@ class SMTPHandler(StreamRequestHandler):
         self.auth = None
         self.startedTLS = False
 
+        ip, port = self.connection.getpeername()
+        self.message.setClientIP(ip)
+
+        if (self.server.printLines):
+            print("[New connection from %s]" % (self.message.clientIP,))
+
     """ Reads a line from TCP Stream
     @return: Read line
     """
@@ -74,8 +80,12 @@ class SMTPHandler(StreamRequestHandler):
         line = self.readLine()
         match = re.match("EHLO (.*)", line)
         if (match == None):
-            raise ValueError("Invalid EHLO sent by client")
-        self.message.setClientName(match.group(1))
+            if (line == "EHLO"): #Handle empty clientname
+                self.message.setClientName("")
+            else:
+                raise ValueError("Invalid EHLO sent by client")
+        else:
+            self.message.setClientName(match.group(1))
 
     """
     Send HELLO to client
@@ -115,8 +125,11 @@ class SMTPHandler(StreamRequestHandler):
     def readAuth(self):
         line = self.readLine()
         authMethod = self.server.authHandler.matchMethod(line)
-        if (authMethod == None):
-            raise ValueError("Unsupported Authentication Type requested by client: " + line)
+        if (authMethod == None): #No supported auth method found
+            if (line == "QUIT"):
+                raise ValueError("The client closed the connection due to no common authentication methods")
+            else:
+                raise ValueError("Unsupported Authentication Type requested by client: " + line)
 
         self.auth = authMethod(self, line)
         username = self.auth.getUsername()

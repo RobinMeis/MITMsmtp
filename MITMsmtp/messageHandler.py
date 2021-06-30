@@ -12,6 +12,7 @@ class Message:
     """
     def __init__(self, messages):
         self.messages = messages
+        self.clientIP = None
         self.client_name = None
         self.username = None
         self.password = None
@@ -19,6 +20,13 @@ class Message:
         self.recipients = []
         self.message = None
         self.completed = False
+
+    """Set the client IP
+    @type clientIP: str
+    @param clientIP: The IP address of the client
+    """
+    def setClientIP(self, clientIP):
+        self.clientIP = clientIP
 
     """Set the client name
     @type client_name: str
