@@ -78,9 +78,9 @@ class SMTPHandler(StreamRequestHandler):
     """
     def readEHLO(self):
         line = self.readLine()
-        match = re.match("EHLO (.*)", line)
+        match = re.match("EHLO (.*)", line, re.IGNORECASE)
         if (match == None):
-            if (line == "EHLO"): #Handle empty clientname
+            if (line.upper() == "EHLO"): #Handle empty clientname
                 self.message.setClientName("")
             else:
                 raise ValueError("Invalid EHLO sent by client")
