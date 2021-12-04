@@ -46,7 +46,7 @@ class SMTPServer(TCPServer):
                  STARTTLS=False,
                  SSL=False,
                  printLines=False,
-                 ssl_version=ssl.PROTOCOL_TLSv1,
+                 ssl_version=ssl.PROTOCOL_TLS,
                  bind_and_activate=True):
         TCPServer.__init__(self, server_address, RequestHandlerClass, bind_and_activate) #TODO: move down!
         self.name = server_name
