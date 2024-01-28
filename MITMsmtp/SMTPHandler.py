@@ -141,8 +141,8 @@ class SMTPHandler(StreamRequestHandler):
     """
     def readSender(self):
         line = self.readLine()
-        match = re.match("MAIL FROM:\<([a-zA-z0-9]*@[a-zA-z0-9\.]*)\>", line)
-        if (match == None):
+        match = re.match(r"MAIL FROM:<([a-zA-Z0-9._+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})>", line)
+        if match is None:
             raise ValueError("Could not read sender")
 
         self.message.setSender(match.group(1))
@@ -162,7 +162,7 @@ class SMTPHandler(StreamRequestHandler):
             if (line == "DATA"):
                 return
 
-            match = re.match("RCPT TO:\<([a-zA-z0-9]*@[a-zA-z0-9\.]*)\>", line)
+            match = re.match(r"RCPT TO:<([a-zA-Z0-9._+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})>", line)
             if (match == None):
                 raise ValueError("Could not read recipients")
             self.message.addRecipient(match.group(1))
